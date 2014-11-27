@@ -73,8 +73,10 @@ function addAssignmentPhoto(playerId, photo) {
             photo: {
                 data: photo,
                 contentType: "image/png"
-            }}
-    });
+            },
+            status: "PENDING"
+        }
+    },function(){});
 }
 
 function showAssignmentPhoto(playerId, cb) {
