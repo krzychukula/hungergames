@@ -6,17 +6,10 @@
 </head>
 <body>
   <h1>{{ title }}</h1>
-  <!-- Welcome {{ user }} -->
-  <p> {{ user.email }}</p>
-  <p> {{ user.prifile.name }}</p>
-  <p> {{ user.prifile.gender }}</p>
-  <p> {{ user.prifile.location }}</p>
-  <p> {{ user.prifile.website }}</p>
+  <p>Welcome to {{ title }}</p>
 
-  <a href="/">Home</a>
 
-  <a href="/logout">/logout</a>
-
+  <a href="/auth/google">Login using Google</a>
 
   {{#messages.errors}}
   {{> msg}}

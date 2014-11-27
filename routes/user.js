@@ -13,6 +13,13 @@ exports.list = function(req, res){
 };
 
 
+exports.login = function(req, res) {
+  if (req.user) return res.redirect('/');
+  res.render('login', {
+    title: 'Login'
+  });
+};
+
 /**
 /**
 * GET /logout
@@ -24,27 +31,6 @@ exports.logout = function(req, res) {
   res.redirect('/');
 };
 
-/**
-* GET /account/unlink/:provider
-* Unlink OAuth provider.
-* @param provider
-*/
-
-exports.getOauthUnlink = function(req, res, next) {
-  var provider = req.params.provider;
-  User.findById(req.user.id, function(err, user) {
-    if (err) return next(err);
-
-    user[provider] = undefined;
-    user.tokens = _.reject(user.tokens, function(token) { return token.kind === provider; });
-
-    user.save(function(err) {
-      if (err) return next(err);
-      req.flash('info', { msg: provider + ' account has been unlinked.' });
-      res.redirect('/account');
-    });
-  });
-};
 
 /**
 * GET /account
