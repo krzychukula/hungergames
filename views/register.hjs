@@ -12,8 +12,10 @@
 <body>
 <h1>Add you photo</h1>
 
-<form>
-    <input type="file" accept="image/*" id="capture" capture="camera">
+<form action="create-player" method="POST">
+    <input type="file" accept="image/*" id="capture" capture="camera" name="photo">
+    <input type="submit" value="upload you photo">
 </form>
+
 </body>
 </html>
