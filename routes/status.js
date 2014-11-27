@@ -1,12 +1,28 @@
 var mongoose = require('mongoose');
-
+var Q = require('q');
 
 
 var statusHandlers = {
     'active': serveActive
 };
 
+function getGame(id) {
+    var Game = mongoose.model('Game');
+    var query  = Game.where({name: id});
+
+    return Q.nfcall(query.findOne.bind(query));
+}
+
 function serveStatus(req, res) {
+    req.user.gameId =
+
+    getGame("hunger game no2").then(function(game) {
+        res.send(200, JSON.stringify(game));
+        return;
+    }).catch(function(err) {
+        res.send(500, err);
+    });
+    /*
     var game = {
 
     };
@@ -16,7 +32,7 @@ function serveStatus(req, res) {
 
     // choose the right template
     var status = player.status;
-    return statusHandlers[status](req, res);
+    return statusHandlers[status](req, res);*/
 }
 
 function waitingForGame(req, res) {
