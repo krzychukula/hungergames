@@ -19,6 +19,9 @@ var passport = require('passport');
 
 var User = require('./models/User');
 
+var mongoClient = require('./mongoClient');
+mongoClient();
+
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -208,8 +211,19 @@ app.use(errorHandler());
 */
 
 
-var mongoClient = require('./mongoClient');
-mongoClient();
+
+
+function setupGame() {
+    var game = {
+        startTime: new Date("November 27, 2014 17:00:00"),
+        endTime: new Date("November 27, 2014 22:00:00"),
+        name: "hunger game no2"
+    };
+
+    mongoClient.createGame(game);
+}
+
+setupGame();
 
 
 app.listen(app.get('port'), function() {

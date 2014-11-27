@@ -71,13 +71,15 @@ function saveCb(err, result) {
     }
 }
 
-function games() {
-    db.once('open', function () {
+function games(cb) {
         Game.find(function (err, games) {
-            if (err) return console.error(err);
-            console.log(games);
+            if (err)
+                return console.error(err);
+            else {
+                cb();
+                console.log("Games:", games);
+            }
         });
-    });
 }
 
 
