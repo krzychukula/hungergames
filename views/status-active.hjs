@@ -7,7 +7,10 @@
     <script src="jquery/dist/jquery.js"></script>
 </head>
 <body>
-    <h1>Hi!</h1>
+    <h1>Your assignment</h1>
+    <img src="{{targetPhoto}}">
+    <a href="/shoot">Liquidate</a>
+
     {{user}}
 </body>
 </html>
