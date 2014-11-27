@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shoot him!</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        .main-container {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+        .message {
+            text-align: center;
+            position: absolute;
+            left: 5vw;
+            right: 5vw;
+            bottom: 5vw;
+            height: 10vh;
+            background: rgba(0,0,0,0.5);
+            font: 3vh sans-serif;
+            color: white;
+            padding-top: 1vh;
+            border-radius: 10px;
+        }
+    </style>
+    <script src="/jquery/dist/jquery.js"></script>
+    <script src="/underscore/underscore-min.js"></script>
+    <script>
+        $(function() {
+            var capturing = false;
+            var videoWidth, videoHeight;
+            var videoStream, canvas, ctx;
+
+            $('.main-container').click(clickHandler);
+
+            function mediaError(err) {
+                console.log(err);
+                window.alert("Media capture unsupported:", err);
+            }
+
+            function findSource(callback) {
+                MediaStreamTrack.getSources(function(sources) {
+                    var source = _.find(sources, function(src) {
+                       return src.kind == 'video' && src.facing == 'environment';
+                    });
+                    if (!source) {
+                        source = _.find(sources, function (src) {
+                            return src.kind == 'video';
+                        });
+                    }
+
+                    callback(source);
+                });
+            }
+
+            function videoNode() {
+                return $('#capture').get(0);
+            }
+
+            function clickHandler() {
+                if (!capturing) startCapturing();
+                if (capturing) sendPhoto();
+            }
+
+            function sendPhoto() {
+                var videoNode = $('#capture').get(0);
+                ctx.drawImage(videoNode, 0, 0);
+                var image = canvas.toDataURL('image/jpeg');
+                window.location = image;
+            }
+
+            function startCapturing() {
+                if (capturing) return;
+
+                $('.tap-message').hide();
+                $('.kill-view').show();
+
+                navigator.getUserMedia  = navigator.getUserMedia ||
+                        navigator.webkitGetUserMedia ||
+                        navigator.mozGetUserMedia ||
+                        navigator.msGetUserMedia;
+
+                if (navigator.getUserMedia) {
+                    findSource(function(source) {
+                        navigator.getUserMedia({audio: false, video: {optional: [{sourceId: source.id}]}}, function(stream) {
+                            capturing = true;
+                            videoStream = window.stream = stream;
+                            var node = $('#capture').get(0);
+                            node.onloadedmetadata = videoReady;
+                            node.src = URL.createObjectURL(stream);
+
+                        }, mediaError);
+                    });
+                } else {
+                    mediaError("No getUserMedia() function.");
+                }
+            }
+
+            function videoReady() {
+                var node = videoNode();
+
+                // get canvas for later
+                canvas = $('#backing-canvas').get(0);
+                ctx = canvas.getContext('2d');
+
+                // set everything up according to width/height
+                videoWidth = node.videoWidth; videoHeight = node.videoHeight;
+                canvas.width = videoWidth; canvas.height = videoHeight;
+                var aspect = videoHeight / videoWidth;
+
+                node.width = window.innerWidth;
+                node.height = Math.ceil(aspect * node.width);
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="main-container">
+        <div class="tap-message message">
+            Tap to start aiming...
+        </div>
+        <div class="kill-view" style="display: none;">
+            <video id="capture" autoplay></video>
+            <div class="kill-message message">Your target's head must fill the whole circle.<br>Tap and hold to kill.</div>
+        </div>
+    </div>
+    <canvas id="backing-canvas" style="display:none;"></canvas>
+</body>
+</html>
