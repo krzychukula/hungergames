@@ -10,9 +10,24 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var errorHandler = require('errorhandler');
 var methodOverride = require('method-override');
+
+var MongoStore = require('connect-mongo')(session);
+var mongoose = require('mongoose');
+var flash = require('express-flash');
+
 var passport = require('passport');
 
 var User = require('./models/User');
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
 
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
@@ -22,12 +37,17 @@ var secrets = require('./secrets')
 // Sign in with Google.
 
 passport.use(new GoogleStrategy(secrets.google, function(req, accessToken, refreshToken, profile, done) {
+
+  console.log('AUTH!', !req,user, !accessToken, !refreshToken, !profile);
+
   if (req.user) {
     User.findOne({ google: profile.id }, function(err, existingUser) {
       if (existingUser) {
         req.flash('errors', { msg: 'There is already a Google account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
+        console.log('errors', { msg: 'There is already a Google account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
         done(err);
       } else {
+        console.log('User.findById');
         User.findById(req.user.id, function(err, user) {
           user.google = profile.id;
           user.tokens.push({ kind: 'google', accessToken: accessToken });
@@ -36,19 +56,26 @@ passport.use(new GoogleStrategy(secrets.google, function(req, accessToken, refre
           user.profile.picture = user.profile.picture || profile._json.picture;
           user.save(function(err) {
             req.flash('info', { msg: 'Google account has been linked.' });
+            console.log('info', { msg: 'Google account has been linked.' });
             done(err, user);
           });
         });
       }
     });
   } else {
+    console.log('User.findOne');
     User.findOne({ google: profile.id }, function(err, existingUser) {
+      console.log('existingUser', err,  existingUser);
       if (existingUser) return done(null, existingUser);
+      console.log('not existing User.findOne', profile._json.email);
       User.findOne({ email: profile._json.email }, function(err, existingEmailUser) {
+        console.log('not existingEmailUser', existingEmailUser);
         if (existingEmailUser) {
           req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with Google manually from Account Settings.' });
+          console.log({ msg: 'There is already an account using this email address. Sign in to that account and link it with Google manually from Account Settings.' });
           done(err);
         } else {
+          console.log('new User()');
           var user = new User();
           user.email = profile._json.email;
           user.google = profile.id;
@@ -90,9 +117,7 @@ var passportConf = {
 
 
 
-var MongoStore = require('connect-mongo')(session);
-var mongoose = require('mongoose');
-var flash = require('express-flash');
+
 
 var routes = require('./routes');
 var user = require('./routes/user');
@@ -100,6 +125,16 @@ var http = require('http');
 var path = require('path');
 
 var app = express();
+
+
+/**
+* Connect to MongoDB.
+*/
+
+mongoose.connect(secrets.db);
+mongoose.connection.on('error', function() {
+  console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
+});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -145,8 +180,8 @@ app.use(express.static(path.join(__dirname, 'bower_components')));
 app.get('/auth/google', passport.authenticate('google', { scope: 'profile email' }));
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), function(req, res) {
   console.log('CALLBACK');
-  console.log('req.session', req.session)
-  console.log('req.user', req.user)
+  // console.log('req.session', req.session)
+  // console.log('req.user', req.user)
   res.redirect(req.session.returnTo || '/');
 });
 
