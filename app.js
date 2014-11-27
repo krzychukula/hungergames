@@ -38,16 +38,16 @@ var secrets = require('./secrets')
 
 passport.use(new GoogleStrategy(secrets.google, function(req, accessToken, refreshToken, profile, done) {
 
-  console.log('AUTH!', !req,user, !accessToken, !refreshToken, !profile);
+  //console.log('AUTH!', !req,user, !accessToken, !refreshToken, !profile);
 
   if (req.user) {
     User.findOne({ google: profile.id }, function(err, existingUser) {
       if (existingUser) {
         req.flash('errors', { msg: 'There is already a Google account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
-        console.log('errors', { msg: 'There is already a Google account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
+        //console.log('errors', { msg: 'There is already a Google account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
         done(err);
       } else {
-        console.log('User.findById');
+        //console.log('User.findById');
         User.findById(req.user.id, function(err, user) {
           user.google = profile.id;
           user.tokens.push({ kind: 'google', accessToken: accessToken });
@@ -56,26 +56,26 @@ passport.use(new GoogleStrategy(secrets.google, function(req, accessToken, refre
           user.profile.picture = user.profile.picture || profile._json.picture;
           user.save(function(err) {
             req.flash('info', { msg: 'Google account has been linked.' });
-            console.log('info', { msg: 'Google account has been linked.' });
+            //console.log('info', { msg: 'Google account has been linked.' });
             done(err, user);
           });
         });
       }
     });
   } else {
-    console.log('User.findOne');
+    //console.log('User.findOne');
     User.findOne({ google: profile.id }, function(err, existingUser) {
-      console.log('existingUser', err,  existingUser);
+      //console.log('existingUser', err,  existingUser);
       if (existingUser) return done(null, existingUser);
-      console.log('not existing User.findOne', profile._json.email);
+      //console.log('not existing User.findOne', profile._json.email);
       User.findOne({ email: profile._json.email }, function(err, existingEmailUser) {
-        console.log('not existingEmailUser', existingEmailUser);
+        ///console.log('not existingEmailUser', existingEmailUser);
         if (existingEmailUser) {
           req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with Google manually from Account Settings.' });
-          console.log({ msg: 'There is already an account using this email address. Sign in to that account and link it with Google manually from Account Settings.' });
+          //console.log({ msg: 'There is already an account using this email address. Sign in to that account and link it with Google manually from Account Settings.' });
           done(err);
         } else {
-          console.log('new User()');
+          //console.log('new User()');
           var user = new User();
           user.email = profile._json.email;
           user.google = profile.id;
@@ -114,12 +114,7 @@ var passportConf = {
   }
 };
 
-var mongo = require('./mongoClient');
 
-var secrets = {
-  db: process.env.MONGOLAB_URI || process.env.MONGODB || 'mongodb://localhost:27017/game',
-  sessionSecret: process.env.SESSION_SECRET || 'Default session secret',
-}
 
 var routes = require('./routes');
 var user = require('./routes/user');
@@ -133,10 +128,16 @@ var app = express();
 * Connect to MongoDB.
 */
 
+
+
+
 mongoose.connect(secrets.db);
 mongoose.connection.on('error', function() {
-  console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
+  console.error('MongoDB Connection Error. Please make sure that MongoDB is running...');
 });
+
+var mongo = require('./mongoClient');
+mongo(secrets.db);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -207,7 +208,7 @@ app.use(errorHandler());
 * Start Express server.
 */
 
-mongo(secrets.db);
+
 
 
 app.listen(app.get('port'), function() {
