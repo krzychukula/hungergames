@@ -190,9 +190,9 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
 
 app.get('/', passportConf.isAuthenticated, routes.index);
 app.get('/login', user.login);
-app.get('/logout', user.logout);
-app.get('/users', user.list);
-app.get('/games', game.games);
+app.get('/logout', passportConf.isAuthenticated, user.logout);
+app.get('/users', passportConf.isAuthenticated, user.list);
+app.get('/games', passportConf.isAuthenticated, game.games);
 
 app.get('/shoot', passportConf.isAuthenticated, require('./routes/shoot'));
 app.get('/account', passportConf.isAuthenticated, require('./routes/status'));
