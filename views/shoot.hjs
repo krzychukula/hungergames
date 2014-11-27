@@ -30,6 +30,15 @@
             padding-top: 1vh;
             border-radius: 10px;
         }
+
+        #crosshair {
+            position: absolute;
+            z-index: 20;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
     </style>
 
     <script src="/jquery/dist/jquery.js"></script>
@@ -148,6 +157,9 @@
         </div>
         <div class="kill-view" style="display: none;">
             <video id="capture" autoplay></video>
+            <svg id="crosshair" style="border: 1px solid blue; width: 100%; height: 100%">
+                <circle cx="50%" cy="40%" r="25%" stroke="rgba(255,120,120,0.4)" stroke-width="30" fill="none" />
+            </svg>
             <div class="kill-message message">Your target's head must fill the whole circle.<br>Tap and hold to kill.</div>
         </div>
     </div>
