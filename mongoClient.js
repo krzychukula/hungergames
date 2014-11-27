@@ -90,7 +90,7 @@ function games(cb) {
             if (err)
                 return console.error(err);
             else {
-                cb();
+                cb(games);
                 console.log("Games:", games);
             }
         });

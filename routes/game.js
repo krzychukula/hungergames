@@ -5,7 +5,7 @@ var mc = require('../mongoClient');
  */
 
 exports.games = function(req, res){
-    mc.games(function(){
-        res.send("Hey ya!");
+    mc.games(function(games) {
+        res.render('games', {games: games});
     });
 };
