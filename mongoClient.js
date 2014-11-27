@@ -138,6 +138,49 @@ function createTwoPlayers() {
     Player.update({id: player2.id}, upsertData, {upsert: true}, function(err){});
 }
 
+function createAssignments() {
+    var kuba = require('fs').readFileSync('./resources/kuba.png');
+    var mirek = require('fs').readFileSync('./resources/mirek.png');
+    var contentType = 'image/png';
+
+    var assingment = new Assignment({
+        killer: "stp-hunger-game:miroslaw.kucharzyk@schibsted.pl",
+        target: "stp-hunger-game:jakub.wasilewski@schibsted.pl",
+        status: "ACTIVE",
+        photo: {
+            data: kuba,
+            contentType: contentType
+        }
+    });
+
+    var assignment2 = new Assignment({
+        killer: "stp-hunger-game:jakub.wasilewski@schibsted.pl",
+        target: "stp-hunger-game:miroslaw.kucharzyk@schibsted.pl",
+        status: "ACTIVE",
+        photo: {
+            data: mirek,
+            contentType: contentType
+        }
+    });
+
+// Convert the Model instance to a simple object using Model's 'toObject' function
+// to prevent weirdness like infinite looping...
+    var upsertData = assingment.toObject();
+    var upsertData2 = assignment2.toObject();
+
+// Delete the _id property, otherwise Mongo will return a "Mod on _id not allowed" error
+    delete upsertData._id;
+    delete upsertData2._id;
+
+// Do the upsert, which works like this: If no Contact document exists with
+// _id = contact.id, then create a new doc using upsertData.
+// Otherwise, update the existing doc with upsertData
+
+    Assignment.update({killer: assingment.killer, target: assingment.target}, upsertData, {upsert: true}, function(err){});
+    Assignment.update({killer: assignment2.killer, target: assignment2.target}, upsertData2, {upsert: true}, function(err){});
+
+}
+
 
 module.exports.createGame = createGame
 module.exports.createPlayer = createPlayer
@@ -146,3 +189,4 @@ module.exports.createAssignment = createAssignment
 module.exports.games = games
 
 module.exports.createTwoPlayers = createTwoPlayers
+module.exports.createAssignments = createAssignments

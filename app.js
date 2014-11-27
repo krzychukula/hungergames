@@ -148,11 +148,6 @@ app.set('view engine', 'hjs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// file parsing
-var multer = require('multer');
-app.use(multer({ dest: './tmp/'}));
-
 //app.use(expressValidator());
 app.use(methodOverride());
 app.use(cookieParser());
@@ -225,13 +220,15 @@ function setupGame() {
         endTime: new Date("November 27, 2014 22:00:00"),
         name: "stp-hunger-game"
     };
-
     mongoClient.createGame(game);
+
+//create 2 static players (upsert = true)
+    mongoClient.createTwoPlayers();
+
+    mongoClient.createAssignments();
 }
 
 setupGame();
-//create 2 static players (upsert = true)
-mongoClient.createTwoPlayers();
 
 
 app.listen(app.get('port'), function() {
