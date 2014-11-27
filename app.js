@@ -204,6 +204,7 @@ app.get('/join/:gameId', passportConf.isAuthenticated, require('./routes/join'))
 app.post('/create-player', passportConf.isAuthenticated, require('./routes/player-create'));
 app.get('/photo/:playerId', passportConf.isAuthenticated, require('./routes/player-photo'));
 app.post('/complete-assignment', passportConf.isAuthenticated, require('./routes/decode-image'));
+app.get('/assignment-photo/:id', passportConf.isAuthenticated, require('./routes/assignment-photo'));
 
 /**
 * 500 Error Handler.

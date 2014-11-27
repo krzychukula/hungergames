@@ -79,9 +79,9 @@ function addAssignmentPhoto(playerId, photo) {
     },function(){});
 }
 
-function showAssignmentPhoto(playerId, cb) {
-    Assignment.find({killer: playerId}, function(err, result) {
-        cb();
+function showAssignmentPhoto(id, cb) {
+    Assignment.findOne({_id: id}, function(err, result) {
+        cb(result.photo.data);
     });
 }
 
@@ -209,3 +209,4 @@ module.exports.games = games
 module.exports.createTwoPlayers = createTwoPlayers
 module.exports.createAssignments = createAssignments
 module.exports.addAssignmentPhoto = addAssignmentPhoto
+module.exports.showAssignmentPhoto = showAssignmentPhoto
