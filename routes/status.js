@@ -2,7 +2,8 @@ var Q = require('q');
 var db = require('../db-util')
 
 var statusHandlers = {
-    'ACTIVE': serveActive
+    'ACTIVE': serveActiveAssignment,
+    'PENDING': servePendingAssignment
 };
 
 
@@ -29,9 +30,9 @@ function serveStatus(req, res) {
     }).then(function(a) {
         assignment = a;
 
-        var status = (player && player.state) || 'ACTIVE';
+        var assignmentStatus = assignment.status;
 
-        return statusHandlers[status](req, res, {
+        return statusHandlers[assignmentStatus](req, res, {
             player: player,
             game: game,
             assignment: assignment
@@ -48,9 +49,15 @@ function waitingForGame(req, res) {
     });
 }
 
-function serveActive(req, res, data) {
+function serveActiveAssignment(req, res, data) {
     data.targetPhoto = '/photo/' + data.assignment.target;
     res.render('status-active', data);
+}
+
+
+function servePendingAssignment(req, res, data) {
+    data.assignmentPhoto = '/assignment-photo/' + data.assignment._id;
+    res.render('status-pending', data);
 }
 
 module.exports = serveStatus;
