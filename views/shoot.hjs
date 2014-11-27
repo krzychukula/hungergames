@@ -7,7 +7,24 @@
             margin: 0;
         }
         .main-container {
-            width: 100%;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+        .message {
+            text-align: center;
+            position: absolute;
+            left: 5vw;
+            right: 5vw;
+            bottom: 5vw;
+            height: 10vh;
+            background: rgba(0,0,0,0.5);
+            font: 3vh sans-serif;
+            color: white;
+            padding-top: 1vh;
+            border-radius: 10px;
         }
     </style>
     <script src="/jquery/dist/jquery.js"></script>
@@ -46,7 +63,7 @@
                 if (capturing) return;
 
                 $('.tap-message').hide();
-                $('#capture').show();
+                $('.kill-view').show();
 
                 navigator.getUserMedia  = navigator.getUserMedia ||
                         navigator.webkitGetUserMedia ||
@@ -82,10 +99,13 @@
 </head>
 <body>
     <div class="main-container">
-        <div class="tap-message">
+        <div class="tap-message message">
             Tap to start stalking...
         </div>
-        <video id="capture" autoplay style="display: none;"></video>
+        <div class="kill-view" style="display: none;">
+            <video id="capture" autoplay></video>
+            <div class="kill-message message">Your target's head must fill the whole circle.<br>Tap and hold to kill.</div>
+        </div>
     </div>
 </body>
 </html>
