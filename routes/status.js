@@ -53,7 +53,7 @@ function waitingForGame(req, res) {
 }
 
 function serveActive(req, res, data) {
-    data.targetPhoto = '/img.png';
+    data.targetPhoto = '/photo/stp-hunger-games:jakub.wasilewski@schibsted.pl';
     res.render('status-active', data);
 }
 

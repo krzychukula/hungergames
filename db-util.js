@@ -9,8 +9,12 @@ module.exports.getGame = function(id) {
 };
 
 module.exports.getPlayer = function(gameId, email) {
-    var Player = mongoose.model('Player');
     var id = gameId + ":" + email;
+    return module.exports.getPlayerByFullId(id);
+};
+
+module.exports.getPlayerByFullId = function(id) {
+    var Player = mongoose.model('Player');
     var query  = Player.where({id: id});
 
     return Q.nfcall(query.findOne.bind(query));

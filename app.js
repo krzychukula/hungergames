@@ -206,6 +206,7 @@ app.get('/account', passportConf.isAuthenticated, require('./routes/status'));
 app.get('/join/:gameId', passportConf.isAuthenticated, require('./routes/join'));
 
 app.post('/create-player', passportConf.isAuthenticated, require('./routes/player-create'));
+app.get('/photo/:playerId', passportConf.isAuthenticated, require('./routes/player-photo'));
 
 /**
 * 500 Error Handler.
