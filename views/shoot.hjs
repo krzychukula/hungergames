@@ -43,6 +43,8 @@
             $('.main-container').click(clickHandler);
             $('#capture').click(clickHandler);
 
+            startCapturing();
+
             function mediaError(err) {
                 console.log(err);
                 window.alert("Media capture unsupported:", err);
@@ -68,7 +70,6 @@
             }
 
             function clickHandler() {
-                if (!capturing) startCapturing();
                 if (capturing) sendPhoto();
                 return false;
             }

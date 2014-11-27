@@ -9,7 +9,7 @@ var statusHandlers = {
 function serveStatus(req, res) {
     var game, player, assignment;
 
-    var gameId = req.session.gameId;
+    var gameId = req.session.gameId || 'stp-hunger-game';
     var userEmail = req.user.email;
 
     db.getGame(req.session.gameId).then(function(g) {
