@@ -190,7 +190,7 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
   res.redirect(req.session.returnTo || '/');
 });
 
-app.get('/', passportConf.isAuthenticated, routes.index);
+app.get('/', passportConf.isAuthenticated, require('./routes/status'));
 app.get('/login', user.login);
 app.get('/logout', passportConf.isAuthenticated, user.logout);
 app.get('/users', passportConf.isAuthenticated, user.list);
