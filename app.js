@@ -126,6 +126,7 @@ app.use(function(req, res, next) {
 
 app.use(require('less-middleware')(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
+app.use(express.static(path.join(__dirname, 'bower_components')));
 
 app.get('/auth/google', passport.authenticate('google', { scope: 'profile email' }));
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), function(req, res) {
@@ -134,6 +135,8 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+
+app.get('/shoot/:assignment', require('./routes/shoot'));
 
 /**
 * 500 Error Handler.
@@ -147,6 +150,12 @@ app.use(errorHandler());
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
+
+
+
+http.createServer(app).listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+>>>>>>> Stashed changes
 });
 
 module.exports = app;

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shoot him!</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        .main-container {
+            width: 100%;
+        }
+    </style>
+    <script src="/jquery/dist/jquery.js"></script>
+    <script src="/underscore/underscore-min.js"></script>
+    <script>
+        $(function() {
+            var capturing = false;
+            var videoWidth, videoHeight;
+
+            $('.main-container').click(startCapturing);
+
+            function mediaError(err) {
+                console.log(err);
+                window.alert("Media capture unsupported:", err);
+            }
+
+            function videoNode() {
+                return window.vidNode = $('#capture').get(0);
+            }
+
+            function findSource(callback) {
+                MediaStreamTrack.getSources(function(sources) {
+                    var source = _.find(sources, function(src) {
+                       return src.kind == 'video' && src.facing == 'environment';
+                    });
+                    if (!source) {
+                        source = _.find(sources, function (src) {
+                            return src.kind == 'video';
+                        });
+                    }
+
+                    callback(source);
+                });
+            }
+            function startCapturing() {
+                if (capturing) return;
+
+                $('.tap-message').hide();
+                $('#capture').show();
+
+                navigator.getUserMedia  = navigator.getUserMedia ||
+                        navigator.webkitGetUserMedia ||
+                        navigator.mozGetUserMedia ||
+                        navigator.msGetUserMedia;
+
+                if (navigator.getUserMedia) {
+                    findSource(function(source) {
+                        navigator.getUserMedia({audio: false, video: {optional: [{sourceId: source.id}]}}, function(stream) {
+                            capturing = true;
+                            window.stream = stream;
+                            var node = $('#capture').get(0);
+                            node.onloadedmetadata = videoReady;
+                            node.src = URL.createObjectURL(stream);
+
+                        }, mediaError);
+                    });
+                } else {
+                    mediaError("No getUserMedia() function.");
+                }
+            }
+
+            function videoReady() {
+                var node = videoNode();
+                videoWidth = node.videoWidth; videoHeight = node.videoHeight;
+                var aspect = videoHeight / videoWidth;
+
+                node.width = window.innerWidth;
+                node.height = Math.ceil(aspect * node.width);
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="main-container">
+        <div class="tap-message">
+            Tap to start stalking...
+        </div>
+        <video id="capture" autoplay style="display: none;"></video>
+    </div>
+</body>
+</html>
