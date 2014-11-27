@@ -213,7 +213,7 @@ function setupGame() {
     var game = {
         startTime: new Date("November 27, 2014 17:00:00"),
         endTime: new Date("November 27, 2014 22:00:00"),
-        name: "hunger game no2"
+        name: "stp-hunger-game"
     };
 
     mongoClient.createGame(game);
