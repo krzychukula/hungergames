@@ -9,7 +9,13 @@
     <p>Welcome to {{ title }}</p>
 
 
-    <a href="/auth/google">Login</a>
+    <a href="/auth/google">Login Google</a>
+
+    <a href="/account/unlink/google">Unlink Google</a>
+
+    <a href="/account">/account</a>
+
+    <a href="/logout">/logout</a>
 
     {{#messages.errors}}
     {{> msg}}

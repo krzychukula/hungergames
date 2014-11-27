@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ title }}</title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+  <h1>{{ title }}</h1>
+  <p>Welcome {{ user }}</p>
+  <p> {{ user.email }}</p>
+  <p> {{ user.prifile.name }}</p>
+  <p> {{ user.prifile.gender }}</p>
+  <p> {{ user.prifile.location }}</p>
+  <p> {{ user.prifile.website }}</p>
+
+
+  <a href="/auth/google">Login Google</a>
+
+  <a href="/account">/account</a>
+
+  {{#messages.errors}}
+  {{> msg}}
+  {{/messages.errors}}
+
+  {{#messages.info}}
+  {{> msg}}
+  {{/messages.info}}
+
+  {{#messages.success}}
+  {{> msg}}
+  {{/messages.success}}
+</body>
+</html>
