@@ -21,6 +21,7 @@
     var future = new Date(new Date().getTime() + 30 * 1000);
     //future can be also string eg.
     //future = '2014/11/28 10:00';
+    //https://github.com/hilios/jQuery.countdown
     $('#clock').countdown(future, function(event) {
       if(event && event.type == 'finish'){
         console.log('start!');
