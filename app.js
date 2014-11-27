@@ -38,14 +38,29 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(expressValidator());
 app.use(methodOverride());
 app.use(cookieParser());
-// app.use(session({
-//   resave: true,
-//   saveUninitialized: true,
-//   secret: secrets.sessionSecret,
-//   store: new MongoStore({ url: secrets.db, auto_reconnect: true })
-// }));
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: secrets.sessionSecret,
+  store: new MongoStore({ url: secrets.db, auto_reconnect: true })
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(function(req, res, next) {
+  // Make user object available in templates.
+  res.locals.user = req.user;
+  next();
+});
+app.use(function(req, res, next) {
+  // Remember original destination before login.
+  var path = req.path.split('/')[1];
+  if (/auth|login|logout|signup|fonts|favicon/i.test(path)) {
+    return next();
+  }
+  req.session.returnTo = req.path;
+  next();
+});
+
 app.use(require('less-middleware')(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 
