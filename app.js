@@ -12,6 +12,14 @@ var errorHandler = require('errorhandler');
 var methodOverride = require('method-override');
 var passport = require('passport');
 
+var MongoStore = require('connect-mongo')(session);
+var mongoose = require('mongoose');
+
+var secrets = {
+  db: process.env.MONGOLAB_URI || process.env.MONGODB || 'mongodb://localhost:27017/game',
+  sessionSecret: process.env.SESSION_SECRET || 'Default session secret',
+}
+
 var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
