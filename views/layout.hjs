@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{title}}</title>
+    <link rel='stylesheet' href='/stylesheets/pure-min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="jquery/dist/jquery.js"></script>
+</head>
+<body>
+    {{< content }}
+</body>
+</html>
