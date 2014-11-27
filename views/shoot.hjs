@@ -33,16 +33,13 @@
         $(function() {
             var capturing = false;
             var videoWidth, videoHeight;
+            var videoStream, canvas, ctx;
 
-            $('.main-container').click(startCapturing);
+            $('.main-container').click(clickHandler);
 
             function mediaError(err) {
                 console.log(err);
                 window.alert("Media capture unsupported:", err);
-            }
-
-            function videoNode() {
-                return window.vidNode = $('#capture').get(0);
             }
 
             function findSource(callback) {
@@ -59,6 +56,23 @@
                     callback(source);
                 });
             }
+
+            function videoNode() {
+                return $('#capture').get(0);
+            }
+
+            function clickHandler() {
+                if (!capturing) startCapturing();
+                if (capturing) sendPhoto();
+            }
+
+            function sendPhoto() {
+                var videoNode = $('#capture').get(0);
+                ctx.drawImage(videoNode, 0, 0);
+                var image = canvas.toDataURL('image/jpeg');
+                window.location = image;
+            }
+
             function startCapturing() {
                 if (capturing) return;
 
@@ -74,7 +88,7 @@
                     findSource(function(source) {
                         navigator.getUserMedia({audio: false, video: {optional: [{sourceId: source.id}]}}, function(stream) {
                             capturing = true;
-                            window.stream = stream;
+                            videoStream = window.stream = stream;
                             var node = $('#capture').get(0);
                             node.onloadedmetadata = videoReady;
                             node.src = URL.createObjectURL(stream);
@@ -88,7 +102,14 @@
 
             function videoReady() {
                 var node = videoNode();
+
+                // get canvas for later
+                canvas = $('#backing-canvas').get(0);
+                ctx = canvas.getContext('2d');
+
+                // set everything up according to width/height
                 videoWidth = node.videoWidth; videoHeight = node.videoHeight;
+                canvas.width = videoWidth; canvas.height = videoHeight;
                 var aspect = videoHeight / videoWidth;
 
                 node.width = window.innerWidth;
@@ -100,12 +121,13 @@
 <body>
     <div class="main-container">
         <div class="tap-message message">
-            Tap to start stalking...
+            Tap to start aiming...
         </div>
         <div class="kill-view" style="display: none;">
             <video id="capture" autoplay></video>
             <div class="kill-message message">Your target's head must fill the whole circle.<br>Tap and hold to kill.</div>
         </div>
     </div>
+    <canvas id="backing-canvas" style="display:none;"></canvas>
 </body>
 </html>
