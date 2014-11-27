@@ -8,8 +8,9 @@ module.exports.getGame = function(id) {
     return Q.nfcall(query.findOne.bind(query));
 };
 
-module.exports.getPlayer = function(id) {
+module.exports.getPlayer = function(gameId, email) {
     var Player = mongoose.model('Player');
+    var id = gameId + ":" + email;
     var query  = Player.where({id: id});
 
     return Q.nfcall(query.findOne.bind(query));

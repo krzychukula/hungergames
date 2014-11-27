@@ -9,11 +9,17 @@ var statusHandlers = {
 function serveStatus(req, res) {
     var game, player, assignment;
 
-    console.log(req.session);
+    var gameId = req.session.gameId;
+    var userEmail = req.user.email;
 
-    db.getGame("hunger game no2").then(function(g) {
+    db.getGame(req.session.gameId).then(function(g) {
         game = g;
-        return db.getPlayer('blah');
+
+        if (game) {
+            return db.getPlayer(gameId, userEmail);
+        } else {
+            return Q.resolve(null);
+        }
     }).then(function(p) {
         player = p;
         if (p && p.status == 'active')
@@ -22,6 +28,10 @@ function serveStatus(req, res) {
             return null;
     }).then(function(a) {
         assignment = a;
+
+        if (!game) {
+            return res.redirect('/games');
+        }
 
         var status = (player && player.status) || 'active';
 
