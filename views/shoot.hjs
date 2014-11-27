@@ -78,7 +78,7 @@
                 var videoNode = $('#capture').get(0);
                 ctx.drawImage(videoNode, 0, 0);
                 var image = canvas.toDataURL('image/jpeg');
-                window.location = image;
+
             }
 
             function startCapturing() {
