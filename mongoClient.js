@@ -12,8 +12,7 @@ module.exports = function () {
 
     var playerSchema = mongoose.Schema({
         id: String,
-        firstName: String,
-        lastName: String,
+        name: String,
         photo: {
             data: Buffer,
             contentType: String
