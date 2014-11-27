@@ -4,6 +4,8 @@ var db = require('../db-util')
 function servePhoto(req, res) {
     var playerId = req.params.playerId;
     db.getPlayerByFullId(playerId).then(function(player) {
+        if (!player)
+            res.send(404, 'Not found.');
         res.header('content-type', player.photo.contentType);
         res.send(200, player.photo.data);
     }).catch(function(err) {

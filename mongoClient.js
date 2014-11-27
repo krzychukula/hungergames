@@ -135,7 +135,7 @@ function createTwoPlayers() {
 // _id = contact.id, then create a new doc using upsertData.
 // Otherwise, update the existing doc with upsertData
     Player.update({id: player.id}, upsertData, {upsert: true}, function(err){});
-    Player.update({id: player2.id}, upsertData, {upsert: true}, function(err){});
+    Player.update({id: player2.id}, upsertData2, {upsert: true}, function(err){});
 }
 
 
