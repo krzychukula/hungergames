@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='/stylesheets/pure-min.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="jquery/dist/jquery.js"></script>
   </head>
   <body>
     <h1>{{ title }}</h1>
-    <p>Welcome to {{ title }}</p>
-
-
-    Hello to Schibsted Hunger Games!
-
 
     <a href="/account">Your Account</a>
+
+    <h2>Wait for the game to start</h2>
+
+    <h1 id='time'>5:00</h1>
 
 
 

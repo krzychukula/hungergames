@@ -1,21 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title>{{ title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel='stylesheet' href='/stylesheets/pure-min.css' />
   <link rel='stylesheet' href='/stylesheets/style.css' />
+  <script src="jquery/dist/jquery.js"></script>
 </head>
 <body>
   <h1>{{ title }}</h1>
-  <!-- Welcome {{ user }} -->
-  <p> {{ user.email }}</p>
-  <p> {{ user.prifile.name }}</p>
-  <p> {{ user.prifile.gender }}</p>
-  <p> {{ user.prifile.location }}</p>
-  <p> {{ user.prifile.website }}</p>
+  <ul>
+    <li>  <a href="/">Home</a>
+    <li><a href="/logout">/logout</a>
+  </ul>
+  <script type="user">
+{{{ user }}};
+  </script>
+  <p>email: {{ user.email }}</p>
+  <p>name: {{ user.profile.name }}</p>
+  <p>gender: {{ user.profile.gender }}</p>
+  <p>location: {{ user.profile.location }}</p>
+  <p>website: {{ user.profile.website }}</p>
 
-  <a href="/">Home</a>
+  <img src="{{user.profile.picture}}" />
 
-  <a href="/logout">/logout</a>
+
 
 
   {{#messages.errors}}
