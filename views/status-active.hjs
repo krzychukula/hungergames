@@ -9,7 +9,10 @@
     <script src="jquery/dist/jquery.js"></script>
 </head>
 <body>
+    {{ game.name }}
+
     <h1>Your assignment</h1>
+
     <img src="{{targetPhoto}}">
     <a href="/shoot">Liquidate</a>
 
