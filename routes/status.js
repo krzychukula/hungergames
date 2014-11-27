@@ -1,3 +1,7 @@
+var mongoose = require('mongoose');
+
+
+
 var statusHandlers = {
     'active': serveActive
 };
@@ -22,6 +26,11 @@ function waitingForGame(req, res) {
 }
 
 function serveActive(req, res) {
+    var userId = req.user.email;
+
+    var Game = mongoose.model('Game');
+    Game.findOne(function)
+
     res.render('status-active', {
         user: req.user
     });

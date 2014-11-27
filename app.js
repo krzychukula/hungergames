@@ -193,10 +193,8 @@ app.get('/login', user.login);
 app.get('/logout', user.logout);
 app.get('/users', user.list);
 
-app.get('/account', passportConf.isAuthenticated, user.getAccount);
-
-app.get('/shoot', require('./routes/shoot'));
-app.get('/status', require('./routes/status'));
+app.get('/shoot', passportConf.isAuthenticated, require('./routes/shoot'));
+app.get('/account', passportConf.isAuthenticated, require('./routes/status'));
 
 /**
 * 500 Error Handler.
