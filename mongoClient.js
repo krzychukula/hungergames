@@ -96,9 +96,54 @@ function games(cb) {
         });
 }
 
+function createTwoPlayers() {
+    var kuba = require('fs').readFileSync('./resources/kuba.png');
+    var mirek = require('fs').readFileSync('./resources/mirek.png');
+    var contentType = 'image/png';
+
+    var player = new Player({
+        id: "stp-hunger-game:miroslaw.kucharzyk@schibsted.pl",
+        firstName: "Miroslaw",
+        lastName: "Kucharzyk",
+        photo: {
+            data: mirek,
+            contentType: contentType
+        },
+        state: "ACTIVE"
+    });
+
+    var player2 = new Player({
+        id: "stp-hunger-game:jakub.wasilewski@schibsted.pl",
+        firstName: "Jakub",
+        lastName: "Wasilewski",
+        photo: {
+            data: kuba,
+            contentType: contentType
+        },
+        state: "ACTIVE"
+    });
+
+// Convert the Model instance to a simple object using Model's 'toObject' function
+// to prevent weirdness like infinite looping...
+    var upsertData = player.toObject();
+    var upsertData2 = player2.toObject();
+
+// Delete the _id property, otherwise Mongo will return a "Mod on _id not allowed" error
+    delete upsertData._id;
+    delete upsertData2._id;
+
+// Do the upsert, which works like this: If no Contact document exists with
+// _id = contact.id, then create a new doc using upsertData.
+// Otherwise, update the existing doc with upsertData
+    Player.update({id: player.id}, upsertData, {upsert: true}, function(err){});
+    Player.update({id: player2.id}, upsertData, {upsert: true}, function(err){});
+}
+
 
 module.exports.createGame = createGame
 module.exports.createPlayer = createPlayer
 module.exports.createAssignment = createAssignment
 
 module.exports.games = games
+
+module.exports.createTwoPlayers = createTwoPlayers

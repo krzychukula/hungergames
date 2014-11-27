@@ -225,7 +225,8 @@ function setupGame() {
 }
 
 setupGame();
-
+//create 2 static players (upsert = true)
+mongoClient.createTwoPlayers();
 
 
 app.listen(app.get('port'), function() {
