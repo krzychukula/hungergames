@@ -4,6 +4,13 @@
  */
 
 var express = require('express');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var bodyParser = require('body-parser');
+var logger = require('morgan');
+var errorHandler = require('errorhandler');
+var methodOverride = require('method-override');
+
 var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
