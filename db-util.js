@@ -16,6 +16,22 @@ module.exports.getPlayer = function(gameId, email) {
     return Q.nfcall(query.findOne.bind(query));
 };
 
+module.exports.createPlayer = function(gameId, userData, photo) {
+    var id = gameId + ":" + userData.email;
+    var name = userData.name;
+    var state = 'active';
+
+    var playerSchema = mongoose.Schema({
+        id: String,
+        name: String,
+        photo: {
+            data: Buffer,
+            contentType: String
+        },
+        state: String
+    });
+};
+
 module.exports.getCurrentAssignment = function(playerId) {
     return Q.resolve(null);
 };

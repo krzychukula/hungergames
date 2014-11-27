@@ -12,7 +12,8 @@
 <body>
 <h1>Add you photo</h1>
 
-<form action="create-player" method="POST">
+<form action="create-player" enctype="multipart/form-data" method="POST">
+    <input type="hidden" name="a" value="1">
     <input type="file" accept="image/*" id="capture" capture="camera" name="photo">
     <input type="submit" value="upload you photo">
 </form>

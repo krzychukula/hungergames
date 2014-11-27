@@ -148,6 +148,11 @@ app.set('view engine', 'hjs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// file parsing
+var multer = require('multer');
+app.use(multer({ dest: './tmp/'}));
+
 //app.use(expressValidator());
 app.use(methodOverride());
 app.use(cookieParser());
