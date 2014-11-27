@@ -67,6 +67,16 @@ function createGame(data) {
     });
 }
 
+function addAssignmentPhoto(playerId, photo) {
+    Assignment.update({killer: playerId}, {
+        $set: {
+            photo: {
+                data: photo,
+                contentType: "image/png"
+            }}
+    });
+}
+
 function createPlayer(data) {
     create(Player, data);
 
@@ -190,3 +200,4 @@ module.exports.games = games
 
 module.exports.createTwoPlayers = createTwoPlayers
 module.exports.createAssignments = createAssignments
+module.exports.addAssignmentPhoto = addAssignmentPhoto
