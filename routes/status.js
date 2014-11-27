@@ -40,6 +40,7 @@ function serveStatus(req, res) {
 
     }).catch(function(err) {
         console.log(err.stack || err);
+        res.send(500);
     });
 }
 
