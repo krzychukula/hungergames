@@ -23,7 +23,7 @@ module.exports.getPlayerByFullId = function(id) {
 module.exports.createPlayer = function(gameId, userData, photo) {
     var id = gameId + ":" + userData.email;
     var name = userData.name;
-    var state = 'active';
+    var state = 'ACTIVE';
 
     var playerSchema = mongoose.Schema({
         id: String,
@@ -37,5 +37,12 @@ module.exports.createPlayer = function(gameId, userData, photo) {
 };
 
 module.exports.getCurrentAssignment = function(playerId) {
-    return Q.resolve(null);
+    var Assignment = mongoose.model('Assignment');
+    console.log("QUERYING:", playerId);
+    var query  = Assignment.where({
+        killer: playerId,
+        status: 'ACTIVE'
+    });
+
+    return Q.nfcall(query.findOne.bind(query));
 };

@@ -2,7 +2,7 @@ var Q = require('q');
 var db = require('../db-util')
 
 var statusHandlers = {
-    'active': serveActive
+    'ACTIVE': serveActive
 };
 
 
@@ -22,18 +22,14 @@ function serveStatus(req, res) {
         }
     }).then(function(p) {
         player = p;
-        if (p && p.status == 'active')
+        if (p && p.state == 'ACTIVE')
             return db.getCurrentAssignment(p.id);
         else
             return null;
     }).then(function(a) {
         assignment = a;
 
-        if (!game) {
-            return res.redirect('/games');
-        }
-
-        var status = (player && player.status) || 'active';
+        var status = (player && player.state) || 'ACTIVE';
 
         return statusHandlers[status](req, res, {
             player: player,
@@ -53,7 +49,7 @@ function waitingForGame(req, res) {
 }
 
 function serveActive(req, res, data) {
-    data.targetPhoto = '/photo/stp-hunger-game:miroslaw.kucharzyk@schibsted.pl';
+    data.targetPhoto = '/photo/' + data.assignment.target;
     res.render('status-active', data);
 }
 
