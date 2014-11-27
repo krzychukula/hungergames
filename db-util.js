@@ -47,7 +47,7 @@ module.exports.getCurrentAssignment = function(playerId) {
     return Q.nfcall(query.findOne.bind(query));
 };
 
-module.exports.getPlayerId = function() {
+module.exports.getPlayerId = function(req) {
     var gameId = req.session.gameId || 'stp-hunger-game';
     var userEmail = req.user.email;
     return gameId + ":" + userEmail;

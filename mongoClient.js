@@ -77,6 +77,12 @@ function addAssignmentPhoto(playerId, photo) {
     });
 }
 
+function showAssignmentPhoto(playerId, cb) {
+    Assignment.find({killer: playerId}, function(err, result) {
+        cb();
+    });
+}
+
 function createPlayer(data) {
     create(Player, data);
 

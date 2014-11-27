@@ -147,6 +147,7 @@ app.set('view engine', 'hjs');
 //app.use(express.favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
+app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(expressValidator());
 app.use(methodOverride());
@@ -202,6 +203,7 @@ app.get('/join/:gameId', passportConf.isAuthenticated, require('./routes/join'))
 
 app.post('/create-player', passportConf.isAuthenticated, require('./routes/player-create'));
 app.get('/photo/:playerId', passportConf.isAuthenticated, require('./routes/player-photo'));
+app.post('/complete-assignment', passportConf.isAuthenticated, require('./routes/decode-image'));
 
 /**
 * 500 Error Handler.

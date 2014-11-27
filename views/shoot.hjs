@@ -84,8 +84,11 @@
                 $.ajax({
                     type: "POST",
                     url: "/complete-assignment",
+                    headers: {
+                        "Content-Type": "text/plain"
+                    } ,
                     data: base64image,
-                    success: function() {
+                    success: function(data) {
                         window.location = '/account';
                     },
                     dataType: "text/plain"
