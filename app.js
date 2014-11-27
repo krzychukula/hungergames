@@ -121,7 +121,8 @@ var passportConf = {
 
 var routes = require('./routes');
 var user = require('./routes/user');
-var game = require('./routes/game')
+var game = require('./routes/game');
+var register = require('./routes/register');
 var http = require('http');
 var path = require('path');
 
@@ -193,6 +194,7 @@ app.get('/login', user.login);
 app.get('/logout', passportConf.isAuthenticated, user.logout);
 app.get('/users', passportConf.isAuthenticated, user.list);
 app.get('/games', passportConf.isAuthenticated, game.games);
+app.get('/register', passportConf.isAuthenticated, game.register);
 
 app.get('/shoot', passportConf.isAuthenticated, require('./routes/shoot'));
 app.get('/account', passportConf.isAuthenticated, require('./routes/status'));
