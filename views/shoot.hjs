@@ -88,10 +88,11 @@
                         "Content-Type": "text/plain"
                     } ,
                     data: base64image,
-                    complete: function(data) {
-                        window.location.assign('/account')
-                    },
-                    dataType: "text/plain"
+
+                    dataType: "text/plain",
+                    complete: function() {
+                        window.location = '/account';
+                    }
                 });
             }
 
