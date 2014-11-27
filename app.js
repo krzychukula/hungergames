@@ -128,10 +128,16 @@ var app = express();
 * Connect to MongoDB.
 */
 
+
+
+
 mongoose.connect(secrets.db);
 mongoose.connection.on('error', function() {
-  console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
+  console.error('MongoDB Connection Error. Please make sure that MongoDB is running...');
 });
+
+var mongo = require('./mongoClient');
+mongo(secrets.db);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -201,8 +207,12 @@ app.use(errorHandler());
 * Start Express server.
 */
 
+
+
+
 app.listen(app.get('port'), function() {
-    console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
+  console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
+
 });
 
 module.exports = app;
