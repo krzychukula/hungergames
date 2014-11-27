@@ -166,7 +166,7 @@ app.use(function(req, res, next) {
 app.use(function(req, res, next) {
   // Remember original destination before login.
   var path = req.path.split('/')[1];
-  if (/auth|login|logout|signup|fonts|favicon/i.test(path)) {
+  if (/auth|login|logout|signup|fonts|stylesheets|javascripts|images|favicon/i.test(path)) {
     return next();
   }
   req.session.returnTo = req.path;
@@ -185,11 +185,10 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
   res.redirect(req.session.returnTo || '/');
 });
 
-app.get('/', routes.index);
-app.get('/login', routes.index);
+app.get('/', passportConf.isAuthenticated, routes.index);
+app.get('/login', user.login);
 app.get('/logout', user.logout);
 app.get('/users', user.list);
-app.get('/account/unlink/:provider', passportConf.isAuthenticated, user.getOauthUnlink);
 
 app.get('/account', passportConf.isAuthenticated, user.getAccount);
 
