@@ -40,8 +40,7 @@ module.exports.getCurrentAssignment = function(playerId) {
     var Assignment = mongoose.model('Assignment');
     console.log("QUERYING:", playerId);
     var query  = Assignment.where({
-        killer: playerId,
-        status: 'ACTIVE'
+        killer: playerId
     });
 
     return Q.nfcall(query.findOne.bind(query));
