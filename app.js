@@ -15,6 +15,8 @@ var passport = require('passport');
 var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 
+var mongo = require('./mongoClient');
+
 var secrets = {
   db: process.env.MONGOLAB_URI || process.env.MONGODB || 'mongodb://localhost:27017/game',
   sessionSecret: process.env.SESSION_SECRET || 'Default session secret',
@@ -63,8 +65,13 @@ app.use(errorHandler());
 * Start Express server.
 */
 
+mongo(secrets.db);
+
+
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
+
+
 });
 
 module.exports = app;
