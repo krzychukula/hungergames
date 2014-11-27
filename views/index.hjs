@@ -18,7 +18,14 @@
 
     <h1 id="clock" class="clock"></h1>
     <script type="text/javascript">
-    $('#clock').countdown('2014/11/27 18:00', function(event) {
+    var future = new Date(new Date().getTime() + 30 * 1000);
+    //future can be also string eg.
+    //future = '2014/11/28 10:00';
+    $('#clock').countdown(future, function(event) {
+      if(event && event.type == 'finish'){
+        console.log('start!');
+        window.location.reload();
+      }
       $(this).html(event.strftime('%H:%M:%S'));
     });
     </script>
