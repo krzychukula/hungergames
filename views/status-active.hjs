@@ -9,13 +9,16 @@
     <script src="jquery/dist/jquery.js"></script>
 </head>
 <body>
-    {{ game.name }}
-
     <h1>Your assignment</h1>
 
-    <img src="{{targetPhoto}}">
-    <a href="/shoot">Liquidate</a>
+    <div class="photoContainer">
+        <div class="userPhoto">
+            <img src="{{targetPhoto}}" class="userPhoto">
+        </div>
+    </div>
+    <div style="text-align: center; z-index: 10; position: relative; top: 10px">
+        <a href="/shoot" class="pure-button pure-button-primary button-xlarge">Liquidate</a>
+    </div>
 
-    {{user}}
 </body>
 </html>

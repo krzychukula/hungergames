@@ -53,6 +53,7 @@ function waitingForGame(req, res) {
 }
 
 function serveActive(req, res, data) {
+    data.targetPhoto = '/img.png';
     res.render('status-active', data);
 }
 
