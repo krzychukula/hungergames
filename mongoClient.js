@@ -51,7 +51,21 @@ function create(model, data) {
 }
 
 function createGame(data) {
-    create(Game, data);
+    var game = new Game(data);
+
+// Convert the Model instance to a simple object using Model's 'toObject' function
+// to prevent weirdness like infinite looping...
+    var upsertData = game.toObject();
+
+// Delete the _id property, otherwise Mongo will return a "Mod on _id not allowed" error
+    delete upsertData._id;
+
+// Do the upsert, which works like this: If no Contact document exists with
+// _id = contact.id, then create a new doc using upsertData.
+// Otherwise, update the existing doc with upsertData
+    Game.update({name: game.name}, upsertData, {upsert: true}, function(err){
+
+    });
 }
 
 function createPlayer(data) {
