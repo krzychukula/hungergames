@@ -12,7 +12,8 @@ function serveStatus(req, res) {
 
     var gameId = req.session.gameId || 'stp-hunger-game';
     var userEmail = req.user.email || 'jakub.wasilewski@schibsted.pl';
-
+    console.log(gameId, userEmail);
+    
     db.getGame(req.session.gameId).then(function(g) {
         game = g;
 
