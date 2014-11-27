@@ -9,7 +9,6 @@ function createPlayer(req, res) {
     var userId = db.getPlayerId(req);
     mongoClient.addAssignmentPhoto(userId, decodedImage);
 
-    fs.writeFile('image_decoded.jpg', decodedImage, function(err) {});
     res.header("Content-Type", "text/plain");
     res.send(200, "ok");
 }
