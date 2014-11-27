@@ -1,38 +1,49 @@
-var mongoose = require('mongoose');
 var Q = require('q');
-
+var db = require('../db-util')
 
 var statusHandlers = {
     'active': serveActive
 };
 
-function getGame(id) {
-    var Game = mongoose.model('Game');
-    var query  = Game.where({name: id});
-
-    return Q.nfcall(query.findOne.bind(query));
-}
 
 function serveStatus(req, res) {
-    req.user.gameId =
+    var game, player, assignment;
 
-    getGame("hunger game no2").then(function(game) {
-        res.send(200, JSON.stringify(game));
-        return;
+    var gameId = req.session.gameId;
+    var userEmail = req.user.email;
+
+    db.getGame(req.session.gameId).then(function(g) {
+        game = g;
+
+        if (game) {
+            return db.getPlayer(gameId, userEmail);
+        } else {
+            return Q.resolve(null);
+        }
+    }).then(function(p) {
+        player = p;
+        if (p && p.status == 'active')
+            return db.getCurrentAssignment(p.id);
+        else
+            return null;
+    }).then(function(a) {
+        assignment = a;
+
+        if (!game) {
+            return res.redirect('/games');
+        }
+
+        var status = (player && player.status) || 'active';
+
+        return statusHandlers[status](req, res, {
+            player: player,
+            game: game,
+            assignment: assignment
+        });
+
     }).catch(function(err) {
-        res.send(500, err);
+        console.log(err.stack || err);
     });
-    /*
-    var game = {
-
-    };
-    var player = {
-        status: 'active'
-    };
-
-    // choose the right template
-    var status = player.status;
-    return statusHandlers[status](req, res);*/
 }
 
 function waitingForGame(req, res) {
@@ -41,21 +52,8 @@ function waitingForGame(req, res) {
     });
 }
 
-function serveActive(req, res) {
-    var userId = req.user.email;
-
-    var Game = mongoose.model('Game');
-    var query  = Game.where({});
-    query.findOne(function (err, kitten) {
-        if (err) return handleError(err);
-        if (kitten) {
-            // doc may be null if no document matched
-        }
-    });
-
-    res.render('status-active', {
-        user: req.user
-    });
+function serveActive(req, res, data) {
+    res.render('status-active', data);
 }
 
 module.exports = serveStatus;

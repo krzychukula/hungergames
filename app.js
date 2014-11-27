@@ -198,6 +198,9 @@ app.get('/register', passportConf.isAuthenticated, register);
 
 app.get('/shoot', passportConf.isAuthenticated, require('./routes/shoot'));
 app.get('/account', passportConf.isAuthenticated, require('./routes/status'));
+app.get('/join/:gameId', passportConf.isAuthenticated, require('./routes/join'));
+
+app.post('/create-player', passportConf.isAuthenticated, require('./routes/player-create'));
 
 /**
 * 500 Error Handler.
