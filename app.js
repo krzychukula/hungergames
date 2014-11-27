@@ -114,7 +114,6 @@ var passportConf = {
   }
 };
 
-var mongo = require('./mongoClient');
 
 var secrets = {
   db: process.env.MONGOLAB_URI || process.env.MONGODB || 'mongodb://localhost:27017/game',
@@ -123,6 +122,7 @@ var secrets = {
 
 var routes = require('./routes');
 var user = require('./routes/user');
+var game = require('./routes/game')
 var http = require('http');
 var path = require('path');
 
@@ -191,6 +191,7 @@ app.get('/', passportConf.isAuthenticated, routes.index);
 app.get('/login', user.login);
 app.get('/logout', user.logout);
 app.get('/users', user.list);
+app.get('/games', game.games);
 
 app.get('/account', passportConf.isAuthenticated, user.getAccount);
 
@@ -206,7 +207,9 @@ app.use(errorHandler());
 * Start Express server.
 */
 
-mongo(secrets.db);
+
+var mongoClient = require('./mongoClient');
+mongoClient();
 
 
 app.listen(app.get('port'), function() {

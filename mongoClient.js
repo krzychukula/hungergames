@@ -4,9 +4,8 @@ var Player,
     Game,
     Assignment,
     db;
-module.exports = function (addr) {
+module.exports = function () {
 
-    mongoose.connect(addr);
     db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
 
@@ -72,6 +71,18 @@ function saveCb(err, result) {
     }
 }
 
+function games() {
+    db.once('open', function () {
+        Game.find(function (err, games) {
+            if (err) return console.error(err);
+            console.log(games);
+        });
+    });
+}
+
+
 module.exports.createGame = createGame
 module.exports.createPlayer = createPlayer
 module.exports.createAssignment = createAssignment
+
+module.exports.games = games
