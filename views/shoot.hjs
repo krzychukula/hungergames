@@ -78,7 +78,18 @@
                 var videoNode = $('#capture').get(0);
                 ctx.drawImage(videoNode, 0, 0);
                 var image = canvas.toDataURL('image/jpeg');
+                var comma = image.indexOf(",");
+                var base64image = image.substring(comma+1);
 
+                $.ajax({
+                    type: "POST",
+                    url: "/complete-assignment",
+                    data: base64image,
+                    success: function() {
+                        window.location = '/account';
+                    },
+                    dataType: "text/plain"
+                });
             }
 
             function startCapturing() {
