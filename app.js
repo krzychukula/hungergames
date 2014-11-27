@@ -16,16 +16,7 @@ var User = require('./models/User');
 
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-var secrets = {
-  db: process.env.MONGOLAB_URI || process.env.MONGODB || 'mongodb://localhost:27017/game',
-  sessionSecret: process.env.SESSION_SECRET || 'Default session secret',
-  google: {
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/auth/google/callback',
-    passReqToCallback: true
-  }
-}
+var secrets = require('./secrets')
 
 
 // Sign in with Google.
@@ -73,6 +64,29 @@ passport.use(new GoogleStrategy(secrets.google, function(req, accessToken, refre
     });
   }
 }));
+
+// Login Required middleware.
+
+var passportConf = {
+
+  isAuthenticated : function(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect('/login');
+  },
+
+  // Authorization Required middleware.
+
+  isAuthorized : function(req, res, next) {
+    var provider = req.path.split('/').slice(-1)[0];
+
+    if (_.find(req.user.tokens, { kind: provider })) {
+      next();
+    } else {
+      res.redirect('/auth/' + provider);
+    }
+  }
+};
+
 
 
 
@@ -130,11 +144,19 @@ app.use(express.static(path.join(__dirname, 'bower_components')));
 
 app.get('/auth/google', passport.authenticate('google', { scope: 'profile email' }));
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), function(req, res) {
+  console.log('CALLBACK');
+  console.log('req.session', req.session)
+  console.log('req.user', req.user)
   res.redirect(req.session.returnTo || '/');
 });
 
 app.get('/', routes.index);
+app.get('/login', routes.index);
+app.get('/logout', user.logout);
 app.get('/users', user.list);
+app.get('/account/unlink/:provider', passportConf.isAuthenticated, user.getOauthUnlink);
+
+app.get('/account', passportConf.isAuthenticated, user.getAccount);
 
 app.get('/shoot/:assignment', require('./routes/shoot'));
 
