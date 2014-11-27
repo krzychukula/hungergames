@@ -29,13 +29,13 @@ function serveActive(req, res) {
     var userId = req.user.email;
 
     var Game = mongoose.model('Game');
-    /*var query  = Game.where({});
+    var query  = Game.where({});
     query.findOne(function (err, kitten) {
         if (err) return handleError(err);
         if (kitten) {
             // doc may be null if no document matched
         }
-    });*/
+    });
 
     res.render('status-active', {
         user: req.user
