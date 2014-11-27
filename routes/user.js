@@ -16,7 +16,7 @@ exports.list = function(req, res){
 exports.login = function(req, res) {
   if (req.user) return res.redirect('/');
   res.render('login', {
-    title: 'Login'
+    title: 'Join Schibsted Hunger Games'
   });
 };
 
